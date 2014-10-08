@@ -33,8 +33,8 @@ class ThreeLegged extends Auth2Flow {
                 'client_id'     => $self->value['client_id'],
                 'redirect_uri'  => $self->value['redirect_uri'],
                 'scope'         => $self->value['scope'],
-                'state'         => $self->value['state']
-
+                'state'         => $self->value['state'],
+				'display'       => $self->value['display']
             ));
 
             header("Location: $location");

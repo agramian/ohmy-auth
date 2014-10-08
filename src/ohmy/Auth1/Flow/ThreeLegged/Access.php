@@ -28,19 +28,30 @@ class Access extends Promise {
         );
     }
 
-    public function POST($url, Array $params=array(), Array $headers=array()) {
+    public function POST($url,
+    					 Array $params=array(),
+    					 Array $headers=array(),
+    					 Array $signParams = null,
+    					 $multipart=false) {
         $url = parse_url($url);
         if (isset($url['query'])) parse_str($url['query'], $params);
+		$signParams = $signParams !== null ? $signParams : $params;
         return $this->request(
             'POST',
             $url['scheme'].'://'.$url['host'].$url['path'],
             $params,
-            $headers
+            $signParams,
+            $headers,
+            $multipart
         );
     }
 
-    private function request($method, $url, Array $params=null, Array $headers=array()) {
-
+    private function request($method,
+    						 $url,
+    						 Array $params=null,
+    						 Array $signParams=null,
+    						 Array $headers=array(),
+    						 $multipart=false) {
         # sign request
         $signature = new Signature(
             $method,
@@ -58,13 +69,11 @@ class Access extends Promise {
                     'oauth_version'
                 ))
             ),
-            $params,
-            $headers
+            $signParams,
+            array()
         );
-
         # set Authorization header
         $headers['Authorization'] = $signature;
-
-        return $this->client->{$method}($url, $params, $headers);
+        return $this->client->{$method}($url, $params, $headers, $multipart);
     }
 }

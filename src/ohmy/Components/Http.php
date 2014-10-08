@@ -8,7 +8,7 @@
 
 interface Http {
 
-    public function POST($url, Array $arguments, Array $headers);
+    public function POST($url, Array $arguments, Array $headers, $multipart);
     public function GET($url, Array $arguments, Array $headers);
 
 } 

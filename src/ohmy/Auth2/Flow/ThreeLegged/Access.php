@@ -27,18 +27,22 @@ class Access extends Promise {
         );
     }
 
-    public function POST($url, $params=array(), $headers=array()) {
+    public function POST($url,
+    					 $params=array(),
+    					 $headers=array(),
+						 $multipart=false) {
         $url = parse_url($url);
         if (isset($url['query'])) parse_str($url['query'], $params);
         return $this->request(
             'POST',
             $url['scheme'].'://'.$url['host'].$url['path'],
             $params,
-            $headers
+            $headers,
+            $multipart
         );
     }
 
-    private function request($method, $url, $params=null, $headers=null) {
-        return $this->client->{$method}($url, $params, $headers);
+    private function request($method, $url, $params=null, $headers=null, $multipart=false) {
+        return $this->client->{$method}($url, $params, $headers, $multipart);
     }
 }
